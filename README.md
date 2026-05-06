@@ -2,9 +2,13 @@
 
 A modern, responsive, and **serverless** dashboard for tracking and visualizing mentor-reported issues. This application operates by fetching data from a static `issues.json` file, which is automatically kept in sync with a SharePoint Excel file using Power Automate.
 
+## 🚀 Live Demo
+Check out the live dashboard here: **[https://hema-anand-v.github.io/Issue-Tracker-Dashboard/](https://hema-anand-v.github.io/Issue-Tracker-Dashboard/)**
+
 ## ✨ Features
 
-- **Serverless Architecture**: No backend server required. The app can be hosted entirely on GitHub Pages.
+- **Serverless Architecture**: No backend server required. The app is hosted entirely on GitHub Pages.
+- **Automated Deployment**: Integrated with GitHub Actions for seamless CI/CD.
 - **Real-time Stats Overview**: Instant visibility into total, open, and closed issues, along with Average Turnaround Time (TAT).
 - **Interactive Visualizations**:
   - **Issues per Program**: Bar chart showing issue distribution.
@@ -17,33 +21,29 @@ A modern, responsive, and **serverless** dashboard for tracking and visualizing 
 
 - **Frontend**: React 19, Vite, Tailwind CSS 4
 - **Visualization**: Recharts, Framer Motion, Lucide React
+- **CI/CD**: GitHub Actions
 - **Data Sync**: Power Automate (SharePoint Excel -> GitHub JSON)
 
 ## 📋 Data Sync Setup (Power Automate)
 
-To keep the dashboard updated without an Azure App Registration, follow these steps:
+To keep the dashboard updated without an Azure App Registration, follow the steps in the **[Power Automate Guide](power_automate_guide.md)**.
 
-1.  **Create a GitHub PAT**: Generate a Personal Access Token in GitHub with `repo` permissions.
-2.  **Power Automate Flow**:
-    - **Trigger**: "When a file is modified" (Select your SharePoint Excel file).
-    - **Action**: "List rows present in a table".
-    - **Action**: "Compose" (Convert rows to JSON).
-    - **Action**: **HTTP Action** (`PUT` request):
-        - **URL**: `https://api.github.com/repos/{owner}/{repo}/contents/public/issues.json`
-        - **Body**: Include the Base64 encoded JSON content and the file's current SHA.
-3.  **Frequency**: The flow ensures that every time someone updates the Excel sheet, the dashboard reflects the changes within minutes.
+Briefly:
+1.  **Trigger**: "When a file is modified" (SharePoint Excel).
+2.  **Action**: "List rows" -> "Compose (JSON)".
+3.  **Action**: **HTTP Action** (`PUT` request) to update `public/issues.json` in this repo.
 
-## 🚀 Getting Started
+## 🚀 Local Development
 
 ### Prerequisites
-
 - Node.js (v18 or higher)
 
 ### Installation
 
-1. **Navigate to the client directory**:
+1. **Clone the repository**:
    ```bash
-   cd client
+   git clone https://github.com/Hema-anand-v/Issue-Tracker-Dashboard.git
+   cd Issue-Tracker-Dashboard
    ```
 
 2. **Install dependencies**:
@@ -57,6 +57,13 @@ To keep the dashboard updated without an Azure App Registration, follow these st
    ```
 
 The application will be available at `http://localhost:5173`.
+
+## 🌐 Deployment
+
+This project is optimized for **GitHub Pages**.
+
+1.  **Automatic**: Any push to the `main` branch (including data updates from Power Automate) will trigger the GitHub Action to rebuild and deploy.
+2.  **Settings**: Ensure your repository settings (**Settings > Pages**) are set to build from the `gh-pages` branch.
 
 ## 📄 License
 
