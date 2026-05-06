@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  # Trigger on push to public/issues.json (from Power Automate) to rebuild the static site
+  # Alternatively, Power Automate can trigger a repository_dispatch or just commit to main
+  # Since Power Automate commits to main, this will trigger automatically.
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies 🔧
+        run: npm install
+
+      - name: Build 🏗️
+        run: npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
